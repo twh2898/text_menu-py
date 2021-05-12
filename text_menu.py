@@ -1,5 +1,5 @@
 
-def select_path(msg, default=None):
+def select_text(msg, default=None):
     if default is not None:
         msg += '({}): '.format(default)
     else:
