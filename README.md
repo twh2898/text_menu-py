@@ -1,4 +1,4 @@
-# text_menu
+# text_menu-py
 
 A set of console menu functions.
 
