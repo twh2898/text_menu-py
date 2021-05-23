@@ -3,11 +3,14 @@
 from setuptools import setup
 import yaml
 
+
 def readme():
     with open('README.md', 'r') as f:
-        return f.readlines()
+        return f.read()
+
 
 with open('setup.yml', 'r') as f:
     cfg = yaml.load(f)
-    setup(**cfg)
-
+    setup(long_description=readme(),
+          long_description_content_type='text/markdown',
+          **cfg)
