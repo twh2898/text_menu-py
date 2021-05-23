@@ -5,7 +5,7 @@ A set of console menu functions.
 
 ## Usage
 
-``py
+```py
 from text_menu import select_text, select_bool, select_choice
 
 t = select_text('Add a name or path')
