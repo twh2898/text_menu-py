@@ -5,6 +5,7 @@ from simple_term_menu import TerminalMenu
 __version__ = '0.1.1'
 
 Default = Optional[Union[str, Callable[[], str]]]
+IntDefault = Optional[Union[int, Callable[[], int]]]
 Validator = Callable[[str], bool]
 Options = Union[List[str], Callable[[], List[str]]]
 Result = Union[str, bool, Tuple[int, str]]
@@ -47,7 +48,7 @@ def select_bool(title: str, default: bool = False):
             return choice == 'y'
 
 
-def select_choice(title: str, options: Options, allow_new: bool = False, validator: Validator = any):
+def select_choice(title: str, options: Options, allow_new: bool = False, default: IntDefault = 0, validator: Validator = any):
     if callable(options):
         options = options()
 
@@ -57,7 +58,10 @@ def select_choice(title: str, options: Options, allow_new: bool = False, validat
     if allow_new:
         options.append('New')
 
-    tm = TerminalMenu(options, title=title, show_search_hint=True)
+    if callable(default):
+        default = default()
+
+    tm = TerminalMenu(options, title=title, cursor_index=default, show_search_hint=True)
     entry = tm.show()
 
     if entry is None:
@@ -114,17 +118,18 @@ class SelectBoolItem(MenuItem):
 
 
 class SelectChoiceItem(MenuItem):
-    def __init__(self, key: str, title: str, options: Options, allow_new: bool = False, validator: Validator = any):
+    def __init__(self, key: str, title: str, options: Options, allow_new: bool = False, default: IntDefault = 0, validator: Validator = any):
         self.key = key
         self.title = title
         self.options = options
         self.allow_new = allow_new
+        self.default = default
         self.validator = validator
         self.result = None
 
     def show(self) -> Tuple[int, str]:
         self.result = select_choice(
-            self.title, self.options, self.allow_new, self.validator)
+            self.title, self.options, self.allow_new, self.default, self.validator)
         print(self.title + ':', self.result[1])
         return self.result
 
@@ -144,12 +149,13 @@ class Menu:
         self.menu.append(item)
         return item
 
-    def add_choice(self, key: str, title: str, options: Options, validator: Validator = any, allow_new: bool = False):
-        item = SelectChoiceItem(key, title, options, allow_new, validator)
+    def add_choice(self, key: str, title: str, options: Options, allow_new: bool = False, default: IntDefault = 0, validator: Validator = any):
+        item = SelectChoiceItem(key, title, options,
+                                allow_new, default, validator)
         self.menu.append(item)
         return item
 
-    def add_nested_choice(self, key: str, title: str, options: Options, validator: Validator = any, allow_new: bool = False):
+    def add_nested_choice(self, key: str, title: str, options: Options, allow_new: bool = False, default: IntDefault = 0, validator: Validator = any):
         raise NotADirectoryError('Please implement add_nested_choice')
 
     def show(self):
