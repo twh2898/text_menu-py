@@ -1,5 +1,6 @@
 
 from typing import List, Callable, Optional, Union, Tuple
+from collections.abc import Iterable
 from simple_term_menu import TerminalMenu
 
 __version__ = '0.1.1'
@@ -7,7 +8,7 @@ __version__ = '0.1.1'
 Default = Optional[Union[str, Callable[[], str]]]
 IntDefault = Optional[Union[int, Callable[[], int]]]
 Validator = Callable[[str], bool]
-Options = Union[List[str], Callable[[], List[str]]]
+Options = Union[Iterable[str], Callable[[], Iterable[str]]]
 Result = Union[str, bool, Tuple[int, str]]
 
 
@@ -54,6 +55,7 @@ def select_choice(title: str, options: Options, allow_new: bool = False, default
 
     if options is None:
         raise ValueError('options must not be None')
+    options = list(options)
 
     if allow_new:
         options.append('New')
