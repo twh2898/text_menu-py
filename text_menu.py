@@ -63,7 +63,8 @@ def select_choice(title: str, options: Options, allow_new: bool = False, default
     if callable(default):
         default = default()
 
-    tm = TerminalMenu(options, title=title, cursor_index=default, show_search_hint=True)
+    tm = TerminalMenu(options, title=title,
+                      cursor_index=default, show_search_hint=True)
     entry = tm.show()
 
     if entry is None:
