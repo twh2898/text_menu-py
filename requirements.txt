@@ -1,2 +1,2 @@
 pyyaml
-simple-term-menu 1.1
+simple-term-menu>=1.1
