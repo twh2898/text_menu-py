@@ -3,7 +3,11 @@ from typing import List, Callable, Optional, Union, Tuple
 from collections.abc import Iterable
 from simple_term_menu import TerminalMenu
 
+__author__ = 'Thomas Harrison'
+__email__ = 'twh2898@vt.edu'
+__license__ = 'MIT'
 __version__ = '0.1.1'
+
 
 Default = Optional[Union[str, Callable[[], str]]]
 IntDefault = Optional[Union[int, Callable[[], int]]]
